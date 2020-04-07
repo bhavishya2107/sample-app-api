@@ -8,7 +8,7 @@ var apiRouter = require("./routes/api/index");
 require("dotenv").config();
 
 mongoose.connect(
-  'mongodb://localhost/sample',
+  process.env.MONGO_URI,
   {
     useNewUrlParser: true,
     useCreateIndex: true,
