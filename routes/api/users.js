@@ -21,14 +21,22 @@ router.post("/users/login", async (req, res) => {
   try {
     var user = await User.findOne({ email });
     if (!user) return res.json({ error: "email invalid" });
-    var match = await user.verifyPassword(password);
-    if (!match) return res.json({ error: "password does not match" });
+    
     //jwt token auth
     var payload = { UserId: user.id, email: user.email };
     var token = await jwt.sign(payload, process.env.SECRET);
     user.token = token;
-    res.json({ success: "true", token });
+    var updateUser = await User.findByIdAndUpdate(
+      user.id,
+      {
+        lastActive: new Date(),
+      },
+      { new: true }
+    );
+
+    res.json({ success: "true", token, updateUser });
   } catch (error) {
+    console.log(error)
     res.status(400).json(error);
   }
 });
@@ -37,9 +45,9 @@ router.post("/users/login", async (req, res) => {
 router.get("/users", async (req, res) => {
   try {
     var user = await User.find({});
-    res.json({ success: true , user});
+    res.json({ success: true, user });
   } catch (error) {
-    res.status(400).json(error)
+    res.status(400).json(error);
   }
 });
 

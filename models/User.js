@@ -18,25 +18,16 @@ var userSchema = new Schema(
       type: String,
       required: true,
     },
+    lastActive:{
+      type: String
+    }
   },
   { timestamps: true }
 );
 
-//hash pw
-userSchema.pre("save", async function (next) {
-  if (this.password && this.isModified("password")) {
-    console.log(this.password);
-    this.password = await bcrypt.hash(this.password, 10);
-    console.log(this.password);
-    next();
-  }
-  next();
-});
-
 //verify pw
 userSchema.methods.verifyPassword = async function (password) {
-  return await bcrypt.compare(password, this.password)
-}
-
+  return await bcrypt.compare(password, this.password);
+};
 
 module.exports = mongoose.model("User", userSchema);
