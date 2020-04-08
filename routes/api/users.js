@@ -48,7 +48,8 @@ router.post("/users/login", async (req, res) => {
 //get all users
 router.get("/users", async (req, res) => {
   try {
-    var user = await User.find({});
+    var userList = await User.find({});
+    var user = userList.filter(u => !u.admin)
     res.json({ success: true, user });
   } catch (error) {
     res.status(400).json(error);
