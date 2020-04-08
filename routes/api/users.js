@@ -34,6 +34,10 @@ router.post("/users/login", async (req, res) => {
       { new: true }
     );
 
+    if (updateUser.disable) {
+      return res.json({ success: true, msg: "User disabled by admin" });
+    }
+
     res.json({ success: "true", token, updateUser });
   } catch (error) {
     console.log(error);
