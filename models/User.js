@@ -20,7 +20,16 @@ var userSchema = new Schema(
     },
     lastActive:{
       type: String
-    }
+    },
+    admin:{
+      type: Boolean,
+      default: false
+    },
+    disable:{
+      type: Boolean,
+      default: false
+    },
+    
   },
   { timestamps: true }
 );

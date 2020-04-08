@@ -21,7 +21,7 @@ router.post("/users/login", async (req, res) => {
   try {
     var user = await User.findOne({ email });
     if (!user) return res.json({ error: "email invalid" });
-    
+
     //jwt token auth
     var payload = { UserId: user.id, email: user.email };
     var token = await jwt.sign(payload, process.env.SECRET);
@@ -36,7 +36,7 @@ router.post("/users/login", async (req, res) => {
 
     res.json({ success: "true", token, updateUser });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(400).json(error);
   }
 });
@@ -45,6 +45,32 @@ router.post("/users/login", async (req, res) => {
 router.get("/users", async (req, res) => {
   try {
     var user = await User.find({});
+    res.json({ success: true, user });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+});
+
+router.post("/users/:id", async (req, res) => {
+  try {
+    var user = await User.findByIdAndUpdate(
+      req.params.id,
+      { disable: true },
+      { new: true }
+    );
+    res.json({ success: true, user });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+});
+
+router.delete("/users/:id", async (req, res) => {
+  try {
+    var user = await User.findByIdAndUpdate(
+      req.params.id,
+      { disable: false },
+      { new: true }
+    );
     res.json({ success: true, user });
   } catch (error) {
     res.status(400).json(error);
